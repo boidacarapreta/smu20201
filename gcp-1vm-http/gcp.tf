@@ -13,37 +13,36 @@ provider "google" {
 }
 
 // https://www.terraform.io/docs/providers/google/r/compute_firewall.html
-resource "google_compute_firewall" "web-0" {
-  name        = "web-0"
+resource "google_compute_firewall" "smu-0" {
+  name        = "smu-0"
   network     = "default"
-  target_tags = ["web"]
+  target_tags = ["smu", "sip", "voip"]
 
   allow {
     protocol = "udp"
-    ports    = ["443"]
-  }
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "443"]
+    ports    = ["5060"]
   }
 }
 
 // https://www.terraform.io/docs/providers/google/d/datasource_compute_address.html
-resource "google_compute_address" "web-0" {
-  name = "web-0"
+resource "google_compute_address" "smu-0" {
+  name = "smu-0"
 }
 
 // https://www.terraform.io/docs/providers/google/d/datasource_compute_instance.html
-resource "google_compute_instance" "web-0" {
-  name         = "web-0"
+resource "google_compute_instance" "smu-0" {
+  name         = "smu-0"
   machine_type = "g1-small"
   zone         = var.gce_zone
-  tags         = ["web"]
+  tags         = ["smu", "sip", "voip"]
+
+  // http://apt.opensips.org/packages.php?v=2.4
+  metadata_startup_script = "sudo apt update; sudo apt -y install tcpdump dirmngr; sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B; echo 'deb http://apt.opensips.org stretch 2.4-releases' | sudo tee -a /etc/apt/sources.list.d/opensips.list > /dev/null; sudo apt update; sudo apt -y install opensips"
+
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = "debian-cloud/debian-10"
     }
   }
 
@@ -55,11 +54,11 @@ resource "google_compute_instance" "web-0" {
     network = "default"
 
     access_config {
-      nat_ip = google_compute_address.web-0.address
+      nat_ip = google_compute_address.smu-0.address
     }
   }
 }
 
 output "ip" {
-  value = google_compute_instance.web-0.network_interface.0.access_config.0.nat_ip
+  value = google_compute_instance.smu-0.network_interface.0.access_config.0.nat_ip
 }
