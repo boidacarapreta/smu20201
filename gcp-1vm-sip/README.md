@@ -2,7 +2,7 @@
 
 # gcp-1m-http
 
-Este modelo define uma máquina virtual no Google Cloud com acesso a HTTP/HTTPS e IPv4 fixo.
+Este modelo define uma máquina virtual no Google Cloud com acesso a SIP (5060/UDP) e IPv4 fixo.
 
 Para usar, é preciso criar o arquivo de variáveis do Terraform, no seguinte formato:
 
