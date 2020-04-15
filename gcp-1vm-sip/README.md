@@ -1,8 +1,8 @@
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/boidacarapreta/smu20201)
 
-# gcp-1m-http
+# gcp-1m-sip
 
-Este modelo define uma máquina virtual no Google Cloud com acesso a SIP (5060/UDP) e IPv4 fixo.
+Este modelo define uma máquina virtual no Google Cloud com acesso a SIP (5060/UDP) e STUN (3478/UDP e 3478/TCP) e IPv4 fixo. Para servidor SIP dos tipos _Registrar_ e _Proxy_ foi escolhido o [OpenSiPS](https://opensips.org/), enquanto que o servidor STUN foi o [coturn](https://github.com/coturn/coturn).
 
 Para usar, é preciso criar o arquivo de variáveis do Terraform, no seguinte formato:
 
@@ -35,7 +35,7 @@ gce_ssh_user = "boidacarapreta"
 gce_ssh_pub_key = "ssh-rsa AAA...xWQ== ederson@boidacarapreta.cc"
 ```
 
-## Como usar
+## Como usar o Terraform
 
 Para facilitar o dia a dia, há o arquivo `Makefile`, que pode criar todo o ambiente:
 
@@ -51,7 +51,10 @@ make destroy
 
 O retorno será o IPv4 para se conectar via SSH.
 
-## Como configurar o OpenSIPS
+Nota importante: A configuração do Terraform, `gcp.tf`, é compatível com [versão 0.12 ou superior](https://www.terraform.io/docs/configuration/).
+
+
+## Como usar o OpenSIPS
 
 Para controlar o OpenSIPS, uma sugestão é que seja feito via systemd. Primeiro, é preciso ativar o suporte a esse, alterando a seguinte linha no arquivo `/etc/default/opensips` (edição com usuário `root` ou via `sudo`):
 
@@ -85,18 +88,10 @@ As seguintes linhas foram adicionadas no arquivo `/etc/opensips/opensips.cfg`:
 
 ```ini
 listen=udp:0.0.0.0:5060
-alias="<IP externo>:5060"
-alias="<IP externo>"
+alias="udp:<IP externo>:5060"
 advertised_address=<IP externo>
 ```
 
-- Suporte a NAT dos agentes remotos (UACs e UASs). Na seção de módulos é basta adicionar (por volta da linha 106):
+## Como usar o coturn
 
-```ini
-loadmodule "nathelper.so"
-modparam("nathelper", "received_avp", "$avp(42)")
-```
-
-## Nota
-
-A configuração do Terraform, `gcp.tf`, é compatível com [versão 0.12 ou superior](https://www.terraform.io/docs/configuration/).
+A instalação padrão do coturn já possui suporte nativo ao STUN. Não é necessária qualquer configuração.

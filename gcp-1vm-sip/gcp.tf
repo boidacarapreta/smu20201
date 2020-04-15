@@ -16,11 +16,16 @@ provider "google" {
 resource "google_compute_firewall" "smu-0" {
   name        = "smu-0"
   network     = "default"
-  target_tags = ["smu", "sip", "voip"]
+  target_tags = ["smu", "sip", "stun", "voip"]
 
   allow {
     protocol = "udp"
-    ports    = ["5060"]
+    ports    = ["3478", "5060"]
+  }
+
+  allow {
+    protocol = "tcp"
+    ports    = ["3478", "5060"]
   }
 }
 
@@ -34,10 +39,10 @@ resource "google_compute_instance" "smu-0" {
   name         = "smu-0"
   machine_type = "g1-small"
   zone         = var.gce_zone
-  tags         = ["smu", "sip", "voip"]
+  tags         = ["smu", "sip", "stun", "voip"]
 
   // http://apt.opensips.org/packages.php?v=2.4
-  metadata_startup_script = "sudo apt update; sudo apt -y install tcpdump dirmngr; sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B; echo 'deb http://apt.opensips.org stretch 2.4-releases' | sudo tee -a /etc/apt/sources.list.d/opensips.list > /dev/null; sudo apt update; sudo apt -y install opensips"
+  metadata_startup_script = "sudo apt update; sudo apt -y install tcpdump dirmngr; sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B; echo 'deb http://apt.opensips.org stretch 2.4-releases' | sudo tee -a /etc/apt/sources.list.d/opensips.list > /dev/null; sudo apt update; sudo apt -y install opensips coturn"
 
 
   boot_disk {
