@@ -4,8 +4,10 @@ variable "gce_region" {}
 variable "gce_zone" {}
 variable "gce_ssh_user" {}
 variable "gce_ssh_pub_key" {}
+variable "gce_dns_zone_name" {}
+variable "gce_dns_zone" {}
 
-// https://www.terraform.io/docs/providers/google/index.html
+# https://www.terraform.io/docs/providers/google/index.html
 provider "google" {
   credentials = file(var.gcp_sakey)
   project     = var.gce_project
@@ -16,34 +18,30 @@ provider "google" {
 resource "google_compute_firewall" "smu-0" {
   name        = "smu-0"
   network     = "default"
-  target_tags = ["smu", "sip", "stun", "voip"]
+  target_tags = ["smu", "https", "stun", "webrtc"]
 
   allow {
     protocol = "udp"
-    ports    = ["3478", "5060"]
+    ports    = ["443", "3478"]
   }
 
   allow {
     protocol = "tcp"
-    ports    = ["3478", "5060"]
+    ports    = ["443", "3478"]
   }
 }
 
-// https://www.terraform.io/docs/providers/google/d/datasource_compute_address.html
+# https://www.terraform.io/docs/providers/google/d/datasource_compute_address.html
 resource "google_compute_address" "smu-0" {
   name = "smu-0"
 }
 
-// https://www.terraform.io/docs/providers/google/d/datasource_compute_instance.html
+# https://www.terraform.io/docs/providers/google/d/datasource_compute_instance.html
 resource "google_compute_instance" "smu-0" {
   name         = "smu-0"
   machine_type = "g1-small"
   zone         = var.gce_zone
-  tags         = ["smu", "sip", "stun", "voip"]
-
-  // http://apt.opensips.org/packages.php?v=2.4
-  metadata_startup_script = "sudo apt update; sudo apt -y install tcpdump dirmngr; sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 049AD65B; echo 'deb http://apt.opensips.org stretch 2.4-releases' | sudo tee -a /etc/apt/sources.list.d/opensips.list > /dev/null; sudo apt update; sudo apt -y install opensips coturn"
-
+  tags         = ["smu", "https", "stun", "webrtc"]
 
   boot_disk {
     initialize_params {
@@ -64,6 +62,10 @@ resource "google_compute_instance" "smu-0" {
   }
 }
 
-output "ip" {
-  value = google_compute_instance.smu-0.network_interface.0.access_config.0.nat_ip
+resource "google_dns_record_set" "webrtc" {
+  name         = "webrtc.${var.gce_dns_zone}"
+  type         = "A"
+  ttl          = 300
+  managed_zone = var.gce_dns_zone_name
+  rrdatas      = [google_compute_instance.smu-0.network_interface[0].access_config[0].nat_ip]
 }
