@@ -27,7 +27,7 @@ resource "google_compute_firewall" "smu-0" {
 
   allow {
     protocol = "tcp"
-    ports    = ["443", "3478"]
+    ports    = ["80", "443", "3478"]
   }
 }
 
