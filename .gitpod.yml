@@ -1,9 +1,7 @@
-image:
-  file: .gitpod.Dockerfile
 github:
   prebuilds:
     master: true
-    branches: false
+    branches: true
     pullRequests: true
     pullRequestsFromForks: true
     addComment: true
@@ -13,4 +11,3 @@ vscode:
   extensions:
     - esbenp.prettier-vscode@2.3.0:1F0Pvb/ORZ/T+b60LIMs8w==
     - eamodio.gitlens@10.2.0:GNDO73Cmp0fYDiLNxVkbsQ==
-    - mauve.terraform@1.4.0:27r9VdcnEIBpa1jdjPSXdA==
