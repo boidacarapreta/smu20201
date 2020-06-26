@@ -1,4 +1,4 @@
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/boidacarapreta/smu20201)
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/boidacarapreta/smu20201/tree/dev)
 
 Este modelo define uma máquina virtual no Google Cloud com acesso a HTTPS (443/TCP e 443/UDP) e STUN (3478/UDP e 3478/TCP) sobre IPv4 fixo com registro DNS próprio.
 
