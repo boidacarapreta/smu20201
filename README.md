@@ -82,6 +82,21 @@ WantedBy=multi-user.target
 
 Destaque para os parâmetros `User` e `WorkingDirectory` que foram adaptados para este caso em especial. Estes são compatíveis com o parâmetro `gce_ssh_user` do arquivo `gcp.tfvars`, onde o repositório do Open-EasyRTC foi clonado na pasta pessoal do usuário `boidacarapreta`.
 
+Para instalar o novo serviço e mantê-lo operacional, os comandos são os seguintes:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable open-easyrtc.service
+sudo systemctl start open-easyrtc.service
+```
+
+Para verificar o serviço:
+
+```bash
+sudo systemctl status open-easyrtc.service
+sudo journalctl -u open-eeasyrtc.service
+```
+
 ## NGINX como Proxy HTTP reverso
 
 A configuração do servidor HTTP NGINX pode ser feita com algumas ferramentas.
@@ -165,6 +180,12 @@ proxy_http_version 1.1;
 proxy_set_header Upgrade $http_upgrade;
 proxy_set_header Connection "Upgrade";
 proxy_set_header Host $host;
+```
+
+Para aplicar os valores no NGINX:
+
+```bash
+sudo nginx -s reload
 ```
 
 ### SSL Labs
