@@ -1,3 +1,5 @@
+# Sistemas Multimídia edição 2020.1
+
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/boidacarapreta/smu20201)
 
 Este modelo define uma máquina virtual no Google Cloud com acesso a HTTPS (443/TCP e 443/UDP) e STUN (3478/UDP e 3478/TCP) sobre IPv4 fixo com registro DNS próprio.
@@ -193,3 +195,9 @@ sudo nginx -s reload
 Por fim, a validação pode ser feita com o [testador da SSL Labs](https://www.ssllabs.com/ssltest/). Com as recomendações sugeridas e aplicadas, foi obtido nível A de segurança:
 
 ![SSL Labs: SSL Report: webrtc.smu20201.boidacarapreta.cc](ssl-labs-webrtc-summary.png)
+
+## Relatório Final
+
+Uma vez operacional a aplicação, pode-se fazer testes de uso. Para o projeto final, deve haver pelo menos duas mídias, onde recomenda-se áudio e vídeo.
+
+O relatório do projeto final tem livre formato: pode ser um documento digital como este README, ou mesmo um arquivo gerado de LaTeX. O importante é que contenha as informações solicitadas conforme esta estrutura: [estrutura.md](estrutura.md).
