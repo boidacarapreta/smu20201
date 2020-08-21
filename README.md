@@ -200,4 +200,4 @@ Por fim, a validação pode ser feita com o [testador da SSL Labs](https://www.s
 
 Uma vez operacional a aplicação, pode-se fazer testes de uso. Para o projeto final, deve haver pelo menos duas mídias, onde recomenda-se áudio e vídeo.
 
-O relatório do projeto final tem livre formato: pode ser um documento digital como este README, ou mesmo um arquivo gerado de LaTeX. O importante é que contenha as informações solicitadas conforme esta estrutura: [estrutura.md](estrutura.md).
+O relatório do projeto final tem livre formato: pode ser um documento digital como este README, ou mesmo um arquivo gerado de LaTeX. O importante é que contenha as informações solicitadas conforme esta estrutura: [projeto_final.md](projeto_final.md).
